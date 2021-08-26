@@ -20,7 +20,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
     Font titleFont;
 	Font subFont;
 	Timer frameDraw;
-	Claw claw = new Claw(200, 200, 50, 50);
+	Claw claw = new Claw(200, 50, 50, 50);
 
 
 
