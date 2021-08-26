@@ -8,6 +8,7 @@ public class ClawGame {
 	final static int HEIGHT = 500;
 	GamePanel game;
 
+
 	public static void main(String[] args) {
 		ClawGame one = new ClawGame();
 		one.setup();
@@ -16,6 +17,8 @@ public class ClawGame {
 	ClawGame() {
 		frame = new JFrame();
 		game= new GamePanel();
+		frame.addKeyListener(game);
+
 
 	}
 
