@@ -50,6 +50,9 @@ public class Claw extends GameObject implements ActionListener {
 	void timerStart() {
 		clawTimer.start();
 	}
+	public void timerStop() {
+		clawTimer.stop();
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
