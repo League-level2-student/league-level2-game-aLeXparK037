@@ -55,7 +55,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 	void updateLeveloneState() {
 		if (claw.speed==0) {
-			//if (thing.x )
+			if (thing.x >= claw.x && thing.x <= claw.x + 50 && thing.y >= claw.y && thing.y <= claw.y + 50) {
+				System.out.println("hi");
+				frameDraw.stop();
+			}
 		}
 
 	}
