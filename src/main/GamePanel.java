@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -20,7 +21,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
     Font titleFont;
 	Font subFont;
 	Timer frameDraw;
-	Claw claw = new Claw(200, 50, 50, 50);
+	Claw claw = new Claw(225, 50, 50, 50);
+	Things thing = new Things(250, 400, 25,25);
 
 
 
@@ -53,6 +55,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	}
 	void  updateLeveloneState() { 
 		
+		
 	}
 	void updateLeveltwoState() {
 		
@@ -81,10 +84,13 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		g.setColor(Color.YELLOW);
 		g.fillRect(0, 0, ClawGame.WIDTH, ClawGame.HEIGHT);
 		claw.draw(g);
+		thing.draw(g);
 	}
 	void drawLeveltwoState(Graphics g) {
 		g.setColor(Color.ORANGE);
 		g.fillRect(0, 0, ClawGame.WIDTH, ClawGame.HEIGHT);
+		claw.draw(g);
+
 	}
 	void drawEndState(Graphics g) {
 		g.setColor(Color.RED);
@@ -120,6 +126,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
+		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+			JOptionPane.showMessageDialog(null, "Your instructions are to retrieve the missing ____ using a claw machine. We wish you the best of luck! P.S. there are no errors with this claw game");
+		}
 		if (e.getKeyCode()==KeyEvent.VK_ENTER) {
 		    if (currentState == END) {
 		        currentState = MENU;
@@ -127,34 +136,23 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		        currentState++;
 		    }
 		}   
-		if (currentState == LEVELONE) {
-			if (e.getKeyCode()==KeyEvent.VK_UP) {
-			    System.out.println("UP");
-			}
-			if (e.getKeyCode()==KeyEvent.VK_DOWN) {
+		if (currentState == LEVELONE || currentState == LEVELTWO) {
+			
+			if (e.getKeyCode()==KeyEvent.VK_DOWN && claw.y<=500) {
 			    System.out.println("down");
+			    claw.timerStart();
+			    
 			}
-			if (e.getKeyCode()==KeyEvent.VK_LEFT) {
+			if (e.getKeyCode()==KeyEvent.VK_LEFT && claw.x>=0) {
 			    System.out.println("left");
+			    claw.left();
 			}
-			if (e.getKeyCode()==KeyEvent.VK_RIGHT) {
+			if (e.getKeyCode()==KeyEvent.VK_RIGHT && claw.x<=500) {
 			    System.out.println("right");
+			    claw.right();
 			}
 		}
-		if (currentState == LEVELTWO) {
-			if (e.getKeyCode()==KeyEvent.VK_UP) {
-			    System.out.println("UP");
-			}
-			if (e.getKeyCode()==KeyEvent.VK_DOWN) {
-			    System.out.println("down");
-			}
-			if (e.getKeyCode()==KeyEvent.VK_LEFT) {
-			    System.out.println("left");
-			}
-			if (e.getKeyCode()==KeyEvent.VK_RIGHT) {
-			    System.out.println("right");
-			}
-		}
+		
 	}
 	@Override
 	public void keyReleased(KeyEvent e) {
