@@ -56,12 +56,11 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	void updateLeveloneState() {
 		if (claw.speed == 0) {
 			if (thing.x >= claw.x && thing.x <= claw.x + 25 && thing.y >= claw.y && thing.y <= claw.y + 25) {
-				System.out.println("hi");
 				String response = JOptionPane.showInputDialog("Congrgulations, you have finished level 1. The next level will be harder. Please type 'ready' when you are ready to move on");
 				frameDraw.stop();
-
 				if (response == "ready") {
-					currentState = LEVELTWO;
+					System.out.println("hi");
+					currentState++;
 				}
 			} else {
 				JOptionPane.showMessageDialog(null, "You have lost. The thing was not inside the box");
