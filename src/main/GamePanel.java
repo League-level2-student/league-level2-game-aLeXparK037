@@ -54,24 +54,12 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	}
 
 	void updateLeveloneState() {
-		if (claw.speed == 0) {
-			if (thing.x >= claw.x && thing.x <= claw.x + 25 && thing.y >= claw.y && thing.y <= claw.y + 25) {
-				String response = JOptionPane.showInputDialog("Congrgulations, you have finished level 1. The next level will be harder. Please type 'ready' when you are ready to move on");
-				frameDraw.stop();
-				if (response == "ready") {
-					System.out.println("hi");
-					currentState++;
-				}
-			} else {
-				JOptionPane.showMessageDialog(null, "You have lost. The thing was not inside the box");
-				frameDraw.stop();
-
-			}
-		}
-
+		claw.update();
+		
 	}
 
 	void updateLeveltwoState() {
+		claw.update();
 
 	}
 
@@ -104,6 +92,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.setColor(Color.ORANGE);
 		g.fillRect(0, 0, ClawGame.WIDTH, ClawGame.HEIGHT);
 		claw.draw(g);
+		thing.draw(g);
 
 	}
 
@@ -113,10 +102,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 		g.setFont(titleFont);
 		g.setColor(Color.BLACK);
-		g.drawString("Game Over", 150, 100);
+		g.drawString("YOU WIN!!", 150, 100);
 
 		g.setFont(subFont);
-		g.drawString("Press 'enter' to begin", 160, 300);
+		g.drawString("Press 'enter' to restart", 160, 300);
 	}
 
 	@Override
@@ -140,17 +129,44 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		// TODO Auto-generated method stub
 
 	}
+	void checkWin() {
+		if (claw.down == false) {
+			if (thing.x >= claw.x && thing.x <= claw.x + 25 && thing.y >= claw.y && thing.y <= claw.y + 25) {
+				String response = JOptionPane.showInputDialog("Congrgulations, you have finished level 1. The next level will be harder. Please type 'ready' when you are ready to move on");
+				if (response.trim().equals("ready")) {
+					System.out.println("hi");
+					currentState++;
+					claw.x = 225;
+					claw.y = 50;
+					int numtwo = ran.nextInt(476);
+					thing.x = numtwo;
+					thing.y = 400;
+
+				} else {
+					System.out.println(response);
+				}
+			} else if (claw.y > 50){
+				JOptionPane.showMessageDialog(null, "You have lost. The thing was not inside the box");
+				frameDraw.stop();
+
+			}
+		}
+
+	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
+		
+		
 		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 			if (currentState == MENU) {
 				JOptionPane.showMessageDialog(null,
 						"Your instructions are to retrieve the missing ____ using a claw machine. We wish you the best of luck! P.S. there are no errors with this claw game");
 			} else if (currentState == LEVELONE || currentState == LEVELTWO) {
-				claw.timerStop();
-				claw.speed = 0;
+				claw.down(false);
+				checkWin();
+
 			}
 		}
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -164,16 +180,16 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 			if (e.getKeyCode() == KeyEvent.VK_DOWN && claw.y <= 500) {
 				System.out.println("down");
-				claw.timerStart();
+				claw.down(true);
 
 			}
 			if (e.getKeyCode() == KeyEvent.VK_LEFT && claw.x >= 0) {
 				System.out.println("left");
-				claw.left();
+				claw.left(true);
 			}
 			if (e.getKeyCode() == KeyEvent.VK_RIGHT && claw.x <= 500) {
 				System.out.println("right");
-				claw.right();
+				claw.right(true);
 			}
 		}
 
@@ -182,6 +198,18 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
+		if (currentState == LEVELONE || currentState == LEVELTWO) {
+
+			
+			if (e.getKeyCode() == KeyEvent.VK_LEFT && claw.x >= 0) {
+				System.out.println("left");
+				claw.left(false);
+			}
+			if (e.getKeyCode() == KeyEvent.VK_RIGHT && claw.x <= 500) {
+				System.out.println("right");
+				claw.right(false);
+			}
+		}
 
 	}
 }

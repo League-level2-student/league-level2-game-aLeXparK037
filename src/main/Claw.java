@@ -7,9 +7,11 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Timer;
 
-public class Claw extends GameObject implements ActionListener {
-	Timer clawTimer = new Timer(1000 / 60, this);
-	boolean downIsActive = true;
+public class Claw extends GameObject {
+	boolean down = false;
+	boolean right = false;
+	boolean left = false;
+
 
 	Claw(int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -23,42 +25,34 @@ public class Claw extends GameObject implements ActionListener {
 
 	}
 
-	public void right() {
-		if (downIsActive == false) {
+	public void right(boolean moveRight) {
+		right = moveRight;
+	}
 
-		} else {
-			x += speed;
+	public void left(boolean moveLeft) {
+		left = moveLeft;
+	}
+
+	public void down(boolean moveDown) {
+		down = moveDown;
+				//3
+	}
+	
+	public void update() {
+		if (y>500) {
+			down = false;
+		} 
+		if (right == true && down == false) {
+			x += 2;
+		}
+		if (left == true && down == false) {
+			x-=2;
+		}
+		if (down == true) {
+			y+=2;
 		}
 	}
 
-	public void left() {
-		if (downIsActive == false) {
-
-		} else {
-			x -= speed;
-		}
-	}
-
-	public void down() {
-		downIsActive = false;
-		y += 3;
-		if (y > 500) {
-			clawTimer.stop();
-		}
-	}
-
-	void timerStart() {
-		clawTimer.start();
-	}
-	public void timerStop() {
-		clawTimer.stop();
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		down();
-
-	}
+	
 
 }

@@ -6,7 +6,6 @@ public class GameObject {
 	 int width;
 	 int height;
 	 int speed = 0;
-	 boolean downIsActive;
 	 GameObject(int x, int y, int width, int height){
 		this.x = x;
 		this.y = y;
