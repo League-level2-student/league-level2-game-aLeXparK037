@@ -132,8 +132,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 	void checkWin() {
 		if (claw.down == false) {
-			if (prize.x >= claw.x && prize.x <= claw.x + prize.width && prize.y >= claw.y + prize.height
-					&& prize.y <= claw.y + prize.height + 10) {
+			if (prize.x >= claw.x && prize.x <= claw.x + 25 && prize.y >= claw.y + 15 && prize.y <= claw.y + 35) {
 				String response = JOptionPane.showInputDialog(
 						"congrats!, you have finished the level. Please type 'ready' when you are ready to move on");
 				if (response.trim().equals("ready")) {
