@@ -25,7 +25,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	Random ran = new Random();
 	int num = ran.nextInt(476);
 	Claw claw = new Claw(225, 50, 50, 50);
-	Things thing = new Things(num, 400, 25, 25);
+	Prize prize = new Prize(num, 400, 25, 25);
 
 	@Override
 	public void paintComponent(Graphics g) {
@@ -85,19 +85,19 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		g.setColor(Color.YELLOW);
 		g.fillRect(0, 0, ClawGame.WIDTH, ClawGame.HEIGHT);
 		claw.draw(g);
-		thing.draw(g);
+		prize.draw(g);
 	}
 
 	void drawLeveltwoState(Graphics g) {
 		g.setColor(Color.ORANGE);
 		g.fillRect(0, 0, ClawGame.WIDTH, ClawGame.HEIGHT);
 		claw.draw(g);
-		thing.draw(g);
+		prize.draw(g);
 
 	}
 
 	void drawEndState(Graphics g) {
-		g.setColor(Color.RED);
+		g.setColor(Color.GRAY);
 		g.fillRect(0, 0, ClawGame.WIDTH, ClawGame.HEIGHT);
 
 		g.setFont(titleFont);
@@ -131,23 +131,23 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	}
 	void checkWin() {
 		if (claw.down == false) {
-			if (thing.x >= claw.x && thing.x <= claw.x + 25 && thing.y >= claw.y && thing.y <= claw.y + 25) {
-				String response = JOptionPane.showInputDialog("Congrgulations, you have finished level 1. The next level will be harder. Please type 'ready' when you are ready to move on");
+			if (prize.x >= claw.x && prize.x <= claw.x + 25 && prize.y >= claw.y + 25 && prize.y <= claw.y + 35) {
+				String response = JOptionPane.showInputDialog("congrats!, you have finished level 1. The next level will be harder. Please type 'ready' when you are ready to move on");
 				if (response.trim().equals("ready")) {
 					System.out.println("hi");
 					currentState++;
 					claw.x = 225;
 					claw.y = 50;
-					int numtwo = ran.nextInt(476);
-					thing.x = numtwo;
-					thing.y = 400;
+					int numtwo = ran.nextInt(465)+5;
+					prize.x = numtwo;
+					prize.y = 400;
 
 				} else {
 					System.out.println(response);
 				}
 			} else if (claw.y > 50){
-				JOptionPane.showMessageDialog(null, "You have lost. The thing was not inside the box");
-				frameDraw.stop();
+				currentState = MENU;
+				JOptionPane.showMessageDialog(null, "You have lost and been returned to the main menu");
 
 			}
 		}
@@ -162,7 +162,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 			if (currentState == MENU) {
 				JOptionPane.showMessageDialog(null,
-						"Your instructions are to retrieve the missing ____ using a claw machine. We wish you the best of luck! P.S. there are no errors with this claw game");
+						"Your instructions are to retrieve the missing beach ball using a the machine. We wish you the best of luck! P.S. there are no errors with this claw game");
 			} else if (currentState == LEVELONE || currentState == LEVELTWO) {
 				claw.down(false);
 				checkWin();
