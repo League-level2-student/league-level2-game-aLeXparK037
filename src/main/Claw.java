@@ -18,7 +18,7 @@ public class Claw extends GameObject {
 	Claw(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		// TODO Auto-generated constructor stub
-		speed = 5;
+		speed = 2;
 		if (needImage) {
 		    loadImage ("claw.png");
 		}
@@ -60,7 +60,7 @@ public class Claw extends GameObject {
 			x-=2;
 		}
 		if (down == true) {
-			y+=2;
+			y+=speed;
 		}
 	}
 	void loadImage(String imageFile) {

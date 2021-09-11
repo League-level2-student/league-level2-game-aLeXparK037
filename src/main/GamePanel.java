@@ -55,7 +55,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 
 	void updateLeveloneState() {
 		claw.update();
-		
+
 	}
 
 	void updateLeveltwoState() {
@@ -129,23 +129,27 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		// TODO Auto-generated method stub
 
 	}
+
 	void checkWin() {
 		if (claw.down == false) {
-			if (prize.x >= claw.x && prize.x <= claw.x + 25 && prize.y >= claw.y + 25 && prize.y <= claw.y + 35) {
-				String response = JOptionPane.showInputDialog("congrats!, you have finished level 1. The next level will be harder. Please type 'ready' when you are ready to move on");
+			if (prize.x >= claw.x && prize.x <= claw.x + prize.width && prize.y >= claw.y + prize.height
+					&& prize.y <= claw.y + prize.height + 10) {
+				String response = JOptionPane.showInputDialog(
+						"congrats!, you have finished the level. Please type 'ready' when you are ready to move on");
 				if (response.trim().equals("ready")) {
 					System.out.println("hi");
 					currentState++;
 					claw.x = 225;
 					claw.y = 50;
-					int numtwo = ran.nextInt(465)+5;
+					int numtwo = ran.nextInt(465) + 5;
 					prize.x = numtwo;
 					prize.y = 400;
+					claw.speed = currentState +1;
 
 				} else {
 					System.out.println(response);
 				}
-			} else if (claw.y > 50){
+			} else if (claw.y > 50) {
 				currentState = MENU;
 				JOptionPane.showMessageDialog(null, "You have lost and been returned to the main menu");
 
@@ -157,8 +161,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
-		
+
 		if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 			if (currentState == MENU) {
 				JOptionPane.showMessageDialog(null,
@@ -200,7 +203,6 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 		// TODO Auto-generated method stub
 		if (currentState == LEVELONE || currentState == LEVELTWO) {
 
-			
 			if (e.getKeyCode() == KeyEvent.VK_LEFT && claw.x >= 0) {
 				System.out.println("left");
 				claw.left(false);
