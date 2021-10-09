@@ -7,8 +7,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
 import java.util.Random;
-
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -17,15 +18,17 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	final int MENU = 0;
 	final int LEVELONE = 1;
 	final int LEVELTWO = 2;
-	final int END = 3;
+	final int LEVELTHREE = 3;
+	final int END = 4;
 	int currentState = MENU;
 	Font titleFont;
 	Font subFont;
 	Timer frameDraw;
 	Random ran = new Random();
-	int num = ran.nextInt(476);
-	Claw claw = new Claw(225, 50, 50, 50);
-	Prize prize = new Prize(num, 400, 25, 25);
+	int num = ran.nextInt(425)+50;
+	Claw claw = new Claw(225, 155, 50, 50);
+	Prize prize = new Prize(num, 390, 25, 25);
+	BufferedImage background;
 
 	@Override
 	public void paintComponent(Graphics g) {
@@ -36,17 +39,29 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			drawLeveloneState(g);
 		} else if (currentState == LEVELTWO) {
 			drawLeveltwoState(g);
+		} else if (currentState == LEVELTHREE) {
+			drawLeveltwoState(g);
 		} else if (currentState == END) {
 			drawEndState(g);
 		}
 	}
 
 	GamePanel() {
+		loadImage("Clawgameback.png");
 		titleFont = new Font("Arial", Font.PLAIN, 36);
 		subFont = new Font("Arial", Font.PLAIN, 18);
 		frameDraw = new Timer(1000 / 60, this);
 		frameDraw.start();
 
+	}
+
+	void loadImage(String imageFile) {
+
+		try {
+			background = ImageIO.read(this.getClass().getResourceAsStream(imageFile));
+		} catch (Exception e) {
+
+		}
 	}
 
 	void updateMenuState() {
@@ -61,6 +76,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	void updateLeveltwoState() {
 		claw.update();
 
+	}
+
+	void updateLevelthreeState() {
+		claw.update();
 	}
 
 	void updateEndState() {
@@ -82,15 +101,20 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	}
 
 	void drawLeveloneState(Graphics g) {
-		g.setColor(Color.YELLOW);
-		g.fillRect(0, 0, ClawGame.WIDTH, ClawGame.HEIGHT);
+		g.drawImage(background, 0, 0, ClawGame.WIDTH, ClawGame.HEIGHT, null);
 		claw.draw(g);
 		prize.draw(g);
 	}
 
 	void drawLeveltwoState(Graphics g) {
-		g.setColor(Color.ORANGE);
-		g.fillRect(0, 0, ClawGame.WIDTH, ClawGame.HEIGHT);
+		g.drawImage(background, 0, 0, ClawGame.WIDTH, ClawGame.HEIGHT, null);
+		claw.draw(g);
+		prize.draw(g);
+
+	}
+
+	void drawLevelthreeState(Graphics g) {
+		g.drawImage(background, 0, 0, ClawGame.WIDTH, ClawGame.HEIGHT, null);
 		claw.draw(g);
 		prize.draw(g);
 
@@ -117,6 +141,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			updateLeveloneState();
 		} else if (currentState == LEVELTWO) {
 			updateLeveltwoState();
+		} else if (currentState == LEVELTHREE) {
+			updateLeveltwoState();
 		} else if (currentState == END) {
 			updateEndState();
 		}
@@ -133,21 +159,22 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	void checkWin() {
 		if (claw.down == false) {
 			if (prize.x >= claw.x && prize.x <= claw.x + 25 && prize.y >= claw.y + 15 && prize.y <= claw.y + 35) {
+				// if (currentState == LEVELTHREE) {
+				// JOptionPane.showMessageDialog(null, "you have WON!");
+				// currentState ++;
+
 				String response = JOptionPane.showInputDialog(
 						"congrats!, you have finished the level. Please type 'ready' when you are ready to move on");
 				if (response.trim().equals("ready")) {
 					System.out.println("hi");
 					currentState++;
-					claw.x = 225;
-					claw.y = 50;
-					int numtwo = ran.nextInt(465) + 5;
+					claw.reset();
+					int numtwo = ran.nextInt(425) + 50;
 					prize.x = numtwo;
-					prize.y = 400;
-					claw.speed = currentState +1;
-
-				} else {
-					System.out.println(response);
+					prize.y = 390;
+					claw.speed = currentState *2;
 				}
+
 			} else if (claw.y > 50) {
 				currentState = MENU;
 				JOptionPane.showMessageDialog(null, "You have lost and been returned to the main menu");
@@ -165,7 +192,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 			if (currentState == MENU) {
 				JOptionPane.showMessageDialog(null,
 						"Your instructions are to retrieve the missing beach ball using a the machine. We wish you the best of luck! P.S. there are no errors with this claw game");
-			} else if (currentState == LEVELONE || currentState == LEVELTWO) {
+			} else if (currentState == LEVELONE || currentState == LEVELTWO || currentState == LEVELTHREE) {
 				claw.down(false);
 				checkWin();
 
@@ -178,18 +205,18 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 				currentState++;
 			}
 		}
-		if (currentState == LEVELONE || currentState == LEVELTWO) {
+		if (currentState == LEVELONE || currentState == LEVELTWO || currentState == LEVELTHREE) {
 
 			if (e.getKeyCode() == KeyEvent.VK_DOWN && claw.y <= 500) {
 				System.out.println("down");
 				claw.down(true);
 
 			}
-			if (e.getKeyCode() == KeyEvent.VK_LEFT && claw.x >= 0) {
+			if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 				System.out.println("left");
 				claw.left(true);
 			}
-			if (e.getKeyCode() == KeyEvent.VK_RIGHT && claw.x <= 500) {
+			if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 				System.out.println("right");
 				claw.right(true);
 			}
@@ -200,13 +227,13 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
-		if (currentState == LEVELONE || currentState == LEVELTWO) {
+		if (currentState == LEVELONE || currentState == LEVELTWO || currentState == LEVELTHREE) {
 
-			if (e.getKeyCode() == KeyEvent.VK_LEFT && claw.x >= 0) {
+			if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 				System.out.println("left");
 				claw.left(false);
 			}
-			if (e.getKeyCode() == KeyEvent.VK_RIGHT && claw.x <= 500) {
+			if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 				System.out.println("right");
 				claw.right(false);
 			}

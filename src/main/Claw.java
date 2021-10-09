@@ -26,7 +26,7 @@ public class Claw extends GameObject {
 
 	void draw(Graphics g) {
 		g.setColor(new Color(161,149,90));
-		g.fillRect(x + 25, 0, 3, y);
+		g.fillRect(x + 25, 155, 3, y-155);
 		if (gotImage) {
 			g.drawImage(image, x, y, width, height, null);
 		} else {
@@ -74,7 +74,14 @@ public class Claw extends GameObject {
 	        needImage = false;
 	    }
 	}
-
+	void reset() {
+		x=255;
+		y=155;
+		 down = false;
+		 right = false;
+		 left = false;
+		
+	}
 	
 
 }
